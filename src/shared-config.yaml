@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-config
+  namespace: mlops-lab
+data:
+  ENVIRONMENT: "development"
+  LOG_LEVEL: "info"
+  MODEL_NAME: "half_plus_two"
+  REQUEST_TIMEOUT: "30"

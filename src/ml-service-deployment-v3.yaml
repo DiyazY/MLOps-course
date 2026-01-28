@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-inference
+  namespace: mlops-lab
+  labels:
+    app: ml-inference
+    tier: backend
+  annotations:
+    kubernetes.io/change-cause: "Initial deployment - http-echo v1"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ml-inference
+  template:
+    metadata:
+      labels:
+        app: ml-inference
+        tier: backend
+        version: v1
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: ml-model
+        image: hashicorp/http-echo:latest
+        args:
+        - "-listen=:5000"
+        - '-text={"predictions": [2.5, 3.0, 4.5], "model": "half_plus_two", "version": "1.0"}'
+        ports:
+        - containerPort: 5000
+          name: http
+        envFrom:
+        - configMapRef:
+            name: shared-config
+        - configMapRef:
+            name: ml-config
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]

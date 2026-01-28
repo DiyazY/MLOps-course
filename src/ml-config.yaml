@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ml-config
+  namespace: mlops-lab
+data:
+  TENSORFLOW_INTRA_OP_PARALLELISM: "2"
+  TENSORFLOW_INTER_OP_PARALLELISM: "2"
+  BATCH_SIZE: "32"
