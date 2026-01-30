@@ -64,7 +64,7 @@ Install before starting:
 
 ## Step 1: Setting Up Your Kubernetes Cluster
 
-**Difficulty:** ⭐ Easy | **Time:** 10 minutes
+**Difficulty:** Easy | **Time:** 10 minutes
 
 ### Tasks
 
@@ -88,7 +88,7 @@ kubectl create namespace mlops-lab
 kubectl config set-context --current --namespace=mlops-lab
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q1.1:** What does `kubectl cluster-info` show you? What is the role of the Kubernetes control plane?
 
@@ -98,7 +98,7 @@ kubectl config set-context --current --namespace=mlops-lab
 
 ## Step 2: Deploying the ML Inference Service
 
-**Difficulty:** ⭐ Easy | **Time:** 15 minutes
+**Difficulty:** Easy | **Time:** 15 minutes
 
 We'll deploy the ML inference service first - this is the backend that simulates an ML model endpoint. We use `hashicorp/http-echo` as a lightweight service that returns a JSON response (simulating model predictions).
 
@@ -193,7 +193,7 @@ kubectl get pods -l app=ml-inference
 kubectl get services
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q2.1:** Why do we use `ClusterIP` instead of `NodePort` for the ML service? What is the security benefit?
 
@@ -205,7 +205,7 @@ kubectl get services
 
 ## Step 3: Deploying the API Gateway
 
-**Difficulty:** ⭐ Easy | **Time:** 20 minutes
+**Difficulty:** Easy | **Time:** 20 minutes
 
 Now we'll deploy nginx as an API gateway that routes requests to the ML service.
 
@@ -346,7 +346,7 @@ kubectl apply -f gateway-service.yaml
 kubectl rollout status deployment/api-gateway
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q3.1:** In the nginx config, we use `server ml-inference-service:5000`. How does nginx resolve this hostname inside the cluster?
 
@@ -356,7 +356,7 @@ kubectl rollout status deployment/api-gateway
 
 ## Step 4: Testing Service-to-Service Communication
 
-**Difficulty:** ⭐ Easy | **Time:** 15 minutes
+**Difficulty:** Easy | **Time:** 15 minutes
 
 ### Tasks
 
@@ -436,7 +436,7 @@ Notes:
 - You may need to check logs from multiple pods if there are multiple replicas.
 - You may increase `--tail` to see more logs.
 
-### ✍️ Questions
+### Questions
 
 > **Q4.1:** Trace the complete request path from your curl command to the ML model response. List each component the request passes through.
 
@@ -446,7 +446,7 @@ Notes:
 
 ## Step 5: Understanding Service Discovery
 
-**Difficulty:** ⭐ Easy | **Time:** 15 minutes
+**Difficulty:** Easy | **Time:** 15 minutes
 
 ### Tasks
 
@@ -481,7 +481,7 @@ exit
 kubectl run dns-check --image=busybox:1.36 --rm -it --restart=Never -n mlops-lab -- cat /etc/resolv.conf
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q5.1:** What IP address does `ml-inference-service` resolve to? Is this a pod IP or something else?
 
@@ -497,7 +497,7 @@ kubectl run dns-check --image=busybox:1.36 --rm -it --restart=Never -n mlops-lab
 
 ## Step 6: Advanced ConfigMap Usage
 
-**Difficulty:** ⭐⭐ Medium | **Time:** 15 minutes
+**Difficulty:** Medium | **Time:** 15 minutes
 
 ### Tasks
 
@@ -619,7 +619,7 @@ Environment Variables from:
 >
 > **Note:** Notice the service discovery environment variables that Kubernetes automatically injects (like `ML_INFERENCE_SERVICE_SERVICE_HOST`). These are created for every service in the namespace!
 
-### ✍️ Questions
+### Questions
 
 > **Q6.1:** We use two ConfigMaps (`shared-config` and `ml-config`). What is the advantage of separating configuration this way?
 
@@ -629,7 +629,7 @@ Environment Variables from:
 
 ## Step 7: Managing Secrets
 
-**Difficulty:** ⭐⭐ Medium | **Time:** 15 minutes
+**Difficulty:** Medium | **Time:** 15 minutes
 
 ### Tasks
 
@@ -683,7 +683,7 @@ kubectl apply -f gateway-deployment.yaml
 kubectl rollout status deployment/api-gateway
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q7.1:** Why are Secrets base64 encoded instead of encrypted by default? What does this mean for security?
 
@@ -695,7 +695,7 @@ kubectl rollout status deployment/api-gateway
 
 ## Step 8: Scaling and Load Balancing
 
-**Difficulty:** ⭐⭐ Medium | **Time:** 20 minutes
+**Difficulty:** Medium | **Time:** 20 minutes
 
 ### Tasks
 
@@ -746,7 +746,7 @@ kubectl delete pod $(kubectl get pod -l app=ml-inference -o jsonpath='{.items[0]
 kubectl scale deployment/ml-inference --replicas=2
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q8.1:** When you deleted a pod during continuous requests, did any requests fail? Why or why not?
 
@@ -760,7 +760,7 @@ kubectl scale deployment/ml-inference --replicas=2
 
 ## Step 9: Horizontal Pod Autoscaling
 
-**Difficulty:** ⭐⭐⭐ Difficult | **Time:** 25 minutes
+**Difficulty:** Difficult | **Time:** 25 minutes
 
 > **Note:** The http-echo container is very lightweight and won't generate enough CPU load from normal requests. To demonstrate HPA scaling, we'll deploy a CPU-intensive service and then also show how to manually simulate scaling behavior.
 
@@ -956,7 +956,7 @@ kubectl delete service php-apache
 kubectl delete hpa php-apache-hpa
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q9.1:** The ML HPA has `stabilizationWindowSeconds: 60` for scale-down but `0` for scale-up. Explain why this asymmetry is important for ML services.
 
@@ -970,7 +970,7 @@ kubectl delete hpa php-apache-hpa
 
 ## Step 10: Rolling Updates and Rollbacks
 
-**Difficulty:** ⭐⭐⭐ Difficult | **Time:** 25 minutes
+**Difficulty:** Difficult | **Time:** 25 minutes
 
 ### Tasks
 
@@ -1115,7 +1115,7 @@ kubectl rollout status deployment/api-gateway &
 wait
 ```
 
-### ✍️ Questions
+### Questions
 
 > **Q10.1:** Explain `maxSurge: 1` and `maxUnavailable: 0`. Why is this ideal for ML services requiring high availability?
 
