@@ -169,3 +169,20 @@ train.csv.dvc → split → ingest → clean → prepare_gold
 
 Each stage only re-runs when its dependencies or parameters change.
 Use `dvc dag` to visualize the pipeline and `dvc repro --dry` to preview what would run.
+
+### Step 7: Incremental Batch Ingestion
+
+To simulate new data arriving over time, the `max_batch` parameter in `params.yaml`
+controls how many batches are ingested. Incrementing it and re-running the pipeline
+triggers a full re-processing of all downstream stages:
+
+```bash
+# Edit params.yaml: set max_batch to N (1-5)
+dvc repro
+git add params.yaml dvc.lock
+git commit -m "ingested batch N into pipeline"
+```
+
+Each commit captures a snapshot of the data at that point in time. The git history
+shows the data growing from 271 gold rows (batch 1) to 1384 rows (all 5 batches),
+with DVC tracking the actual data files at each version.
