@@ -103,3 +103,34 @@ Metadata columns are added for lineage tracking: `batch_id`, `ingestion_timestam
 and `source_file`. Batches are appended incrementally to the bronze dataset.
 
 Output: `data/bronze/bronze_data.csv`
+
+### Step 3: Silver Layer Cleaning
+
+```bash
+python src/clean.py
+```
+
+Processes bronze data through several cleaning and transformation stages:
+- **Duplicate removal** — removes repeated date entries (keeps first)
+- **Out-of-range handling** — nullifies anomalous `meanpressure` values (e.g. -3, 7679), clips other variables to physically valid ranges
+- **Missing value imputation** — forward-fill then backward-fill, appropriate for time-series continuity
+- **Temporal features** — extracts `month`, `day_of_year`, and `season`
+- **Rolling averages** — 7-day and 30-day windows for `meantemp` and `humidity`
+- **Lag features** — 1-day and 7-day lags for all numeric variables
+
+Output: `data/silver/silver_data.csv`
+
+### Step 4: Data Quality Validation
+
+```bash
+python src/validate.py
+```
+
+Runs 14 automated checks on the silver dataset:
+- Schema validation (column types)
+- Completeness (no missing values, no duplicate dates)
+- Value range checks for all climate variables
+- Temporal continuity (no gaps > 7 days, sorted order)
+- Row count consistency between bronze and silver layers
+
+Exits with error code 1 if any check fails.

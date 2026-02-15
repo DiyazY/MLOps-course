@@ -1,0 +1,5 @@
+outs:
+- md5: 488eca6872d43c37952fabab5a2234ad
+  size: 362604
+  hash: md5
+  path: silver_data.csv
