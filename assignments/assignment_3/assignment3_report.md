@@ -1,4 +1,4 @@
-# Assignment 3: DataOps Pipeline — Report
+# Assignment 3: DataOps Pipeline Report
 
 ## 1. Environment and Infrastructure
 
@@ -196,7 +196,7 @@ ML-ready dataset for **next-day mean temperature forecasting**:
 - Features selected based on Pearson correlation with the target (threshold > 0.1)
 - 3 low-signal features dropped: `month`, `day_of_year`, `season_autumn`
 
-No model training is performed — the gold layer is structured and ready for a downstream modelling step.
+The gold layer is structured and ready for a downstream modelling step.
 
 Final state: 1384 rows, 19 features + 1 target.
 
