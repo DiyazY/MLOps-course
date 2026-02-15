@@ -1,0 +1,36 @@
+split:
+  n_batches: 5
+  input_file: data/raw/train.csv
+  output_dir: data/batches
+
+ingest:
+  batch_dir: data/batches
+  output_file: data/bronze/bronze_data.csv
+  # Simulated quality issues
+  drop_fraction: 0.05
+  missing_fraction: 0.03
+  duplicate_fraction: 0.02
+  random_seed: 42
+
+clean:
+  input_file: data/bronze/bronze_data.csv
+  output_file: data/silver/silver_data.csv
+  # Value ranges for validation
+  meantemp_range: [-10, 50]
+  humidity_range: [0, 100]
+  wind_speed_min: 0
+  meanpressure_range: [900, 1100]
+  # Feature engineering
+  rolling_windows: [7, 30]
+  lag_days: [1, 7]
+
+validate:
+  silver_file: data/silver/silver_data.csv
+  bronze_file: data/bronze/bronze_data.csv
+
+gold:
+  input_file: data/silver/silver_data.csv
+  output_file: data/gold/gold_data.csv
+  target: meantemp
+  forecast_horizon: 1
+  correlation_threshold: 0.1
