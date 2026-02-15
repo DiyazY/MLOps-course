@@ -150,3 +150,22 @@ Transforms silver data into a supervised learning dataset for **next-day mean te
 Final dataset: 1384 rows, 19 features + target. No model training is performed.
 
 Output: `data/gold/gold_data.csv`
+
+### Step 6: DVC Pipeline
+
+All stages are defined in `dvc.yaml` with explicit dependencies, parameters, and outputs.
+The full pipeline can be reproduced with:
+
+```bash
+dvc repro
+```
+
+Pipeline DAG:
+
+```
+train.csv.dvc → split → ingest → clean → prepare_gold
+                                    ↘ validate
+```
+
+Each stage only re-runs when its dependencies or parameters change.
+Use `dvc dag` to visualize the pipeline and `dvc repro --dry` to preview what would run.

@@ -1,0 +1,151 @@
+schema: '2.0'
+stages:
+  split:
+    cmd: python src/split_batches.py
+    deps:
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 6bdfcd95ad4b9ebf357a55e1107f2d92
+      size: 78199
+    - path: src/split_batches.py
+      hash: md5
+      md5: 7a86b8eb3516c1f4a7adda9a8f93fa71
+      size: 1744
+    params:
+      params.yaml:
+        split:
+          n_batches: 5
+          input_file: data/raw/train.csv
+          output_dir: data/batches
+    outs:
+    - path: data/batches
+      hash: md5
+      md5: b7478872db3c1ff3658ac6d9454e7169.dir
+      size: 77204
+      nfiles: 5
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+    - path: data/batches
+      hash: md5
+      md5: b7478872db3c1ff3658ac6d9454e7169.dir
+      size: 77204
+      nfiles: 5
+    - path: src/ingest.py
+      hash: md5
+      md5: 40b8fe45b85f8dd828be05c7ef54935a
+      size: 4697
+    params:
+      params.yaml:
+        ingest:
+          batch_dir: data/batches
+          output_file: data/bronze/bronze_data.csv
+          drop_fraction: 0.05
+          missing_fraction: 0.03
+          duplicate_fraction: 0.02
+          random_seed: 42
+    outs:
+    - path: data/bronze/bronze_data.csv
+      hash: md5
+      md5: 0b794d1b2e31b16a3b35eff540d2ac08
+      size: 131330
+  clean:
+    cmd: python src/clean.py
+    deps:
+    - path: data/bronze/bronze_data.csv
+      hash: md5
+      md5: 0b794d1b2e31b16a3b35eff540d2ac08
+      size: 131330
+    - path: src/clean.py
+      hash: md5
+      md5: 9cd0a80804cfdf5b1102711b033cca81
+      size: 5364
+    params:
+      params.yaml:
+        clean:
+          input_file: data/bronze/bronze_data.csv
+          output_file: data/silver/silver_data.csv
+          meantemp_range:
+          - -10
+          - 50
+          humidity_range:
+          - 0
+          - 100
+          wind_speed_min: 0
+          meanpressure_range:
+          - 900
+          - 1100
+          rolling_windows:
+          - 7
+          - 30
+          lag_days:
+          - 1
+          - 7
+    outs:
+    - path: data/silver/silver_data.csv
+      hash: md5
+      md5: 192abb5898b5b1158cd771b532c723b0
+      size: 362604
+  validate:
+    cmd: python src/validate.py
+    deps:
+    - path: data/bronze/bronze_data.csv
+      hash: md5
+      md5: 0b794d1b2e31b16a3b35eff540d2ac08
+      size: 131330
+    - path: data/silver/silver_data.csv
+      hash: md5
+      md5: 192abb5898b5b1158cd771b532c723b0
+      size: 362604
+    - path: src/validate.py
+      hash: md5
+      md5: b9af8cfb7c6350c993448c9e9d3983bb
+      size: 4343
+    params:
+      params.yaml:
+        clean:
+          input_file: data/bronze/bronze_data.csv
+          output_file: data/silver/silver_data.csv
+          meantemp_range:
+          - -10
+          - 50
+          humidity_range:
+          - 0
+          - 100
+          wind_speed_min: 0
+          meanpressure_range:
+          - 900
+          - 1100
+          rolling_windows:
+          - 7
+          - 30
+          lag_days:
+          - 1
+          - 7
+        validate:
+          silver_file: data/silver/silver_data.csv
+          bronze_file: data/bronze/bronze_data.csv
+  prepare_gold:
+    cmd: python src/prepare_gold.py
+    deps:
+    - path: data/silver/silver_data.csv
+      hash: md5
+      md5: 192abb5898b5b1158cd771b532c723b0
+      size: 362604
+    - path: src/prepare_gold.py
+      hash: md5
+      md5: 93d7ccd4f3d39a4f07fab6598a66f6d5
+      size: 3079
+    params:
+      params.yaml:
+        gold:
+          input_file: data/silver/silver_data.csv
+          output_file: data/gold/gold_data.csv
+          target: meantemp
+          forecast_horizon: 1
+          correlation_threshold: 0.1
+    outs:
+    - path: data/gold/gold_data.csv
+      hash: md5
+      md5: a3c4d6a97d02154db729ce1075371e08
+      size: 309151

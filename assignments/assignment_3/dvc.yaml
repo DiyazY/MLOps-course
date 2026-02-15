@@ -1,0 +1,50 @@
+stages:
+  split:
+    cmd: python src/split_batches.py
+    deps:
+      - src/split_batches.py
+      - data/raw/train.csv
+    params:
+      - split
+    outs:
+      - data/batches
+
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+      - src/ingest.py
+      - data/batches
+    params:
+      - ingest
+    outs:
+      - data/bronze/bronze_data.csv
+
+  clean:
+    cmd: python src/clean.py
+    deps:
+      - src/clean.py
+      - data/bronze/bronze_data.csv
+    params:
+      - clean
+    outs:
+      - data/silver/silver_data.csv
+
+  validate:
+    cmd: python src/validate.py
+    deps:
+      - src/validate.py
+      - data/silver/silver_data.csv
+      - data/bronze/bronze_data.csv
+    params:
+      - validate
+      - clean
+
+  prepare_gold:
+    cmd: python src/prepare_gold.py
+    deps:
+      - src/prepare_gold.py
+      - data/silver/silver_data.csv
+    params:
+      - gold
+    outs:
+      - data/gold/gold_data.csv
