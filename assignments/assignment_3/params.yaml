@@ -7,7 +7,7 @@ ingest:
   batch_dir: data/batches
   output_file: data/bronze/bronze_data.csv
   # Controls how many batches to ingest (1-5), increase to simulate new data arriving
-  max_batch: 1
+  max_batch: 2
   # Simulated quality issues
   drop_fraction: 0.05
   missing_fraction: 0.03

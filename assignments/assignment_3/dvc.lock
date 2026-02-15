@@ -40,7 +40,7 @@ stages:
         ingest:
           batch_dir: data/batches
           output_file: data/bronze/bronze_data.csv
-          max_batch: 1
+          max_batch: 2
           drop_fraction: 0.05
           missing_fraction: 0.03
           duplicate_fraction: 0.02
@@ -48,15 +48,15 @@ stages:
     outs:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 65908f404add6510afa8e6c3c9aee35b
-      size: 28871
+      md5: 5c70fa7a419249e423e855a81e440dc4
+      size: 53256
   clean:
     cmd: python src/clean.py
     deps:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 65908f404add6510afa8e6c3c9aee35b
-      size: 28871
+      md5: 5c70fa7a419249e423e855a81e440dc4
+      size: 53256
     - path: src/clean.py
       hash: md5
       md5: 9cd0a80804cfdf5b1102711b033cca81
@@ -85,19 +85,19 @@ stages:
     outs:
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 42918c6f2d5ffe8f2f3de4871f4f7caa
-      size: 78867
+      md5: 3dc46f8feef52cc585db602b7715d081
+      size: 145786
   validate:
     cmd: python src/validate.py
     deps:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 65908f404add6510afa8e6c3c9aee35b
-      size: 28871
+      md5: 5c70fa7a419249e423e855a81e440dc4
+      size: 53256
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 42918c6f2d5ffe8f2f3de4871f4f7caa
-      size: 78867
+      md5: 3dc46f8feef52cc585db602b7715d081
+      size: 145786
     - path: src/validate.py
       hash: md5
       md5: b9af8cfb7c6350c993448c9e9d3983bb
@@ -131,8 +131,8 @@ stages:
     deps:
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 42918c6f2d5ffe8f2f3de4871f4f7caa
-      size: 78867
+      md5: 3dc46f8feef52cc585db602b7715d081
+      size: 145786
     - path: src/prepare_gold.py
       hash: md5
       md5: 93d7ccd4f3d39a4f07fab6598a66f6d5
@@ -148,5 +148,5 @@ stages:
     outs:
     - path: data/gold/gold_data.csv
       hash: md5
-      md5: 76bf88d74658b2f3c391f150952ae2c9
-      size: 71008
+      md5: 3097f535083c6248021e8300f5a7ce79
+      size: 127929
