@@ -48,14 +48,14 @@ stages:
     outs:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 63da8438c0a0ca1830620216bfa5258c
+      md5: d505313f4e5dffdda9fe17883536c36c
       size: 131330
   clean:
     cmd: python src/clean.py
     deps:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 63da8438c0a0ca1830620216bfa5258c
+      md5: d505313f4e5dffdda9fe17883536c36c
       size: 131330
     - path: src/clean.py
       hash: md5
@@ -85,18 +85,18 @@ stages:
     outs:
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 2fbd9ca4d1e467f0311d80d1a22dd196
+      md5: 167efd1c2336be163249d7b3bbb54cbd
       size: 362604
   validate:
     cmd: python src/validate.py
     deps:
     - path: data/bronze/bronze_data.csv
       hash: md5
-      md5: 63da8438c0a0ca1830620216bfa5258c
+      md5: d505313f4e5dffdda9fe17883536c36c
       size: 131330
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 2fbd9ca4d1e467f0311d80d1a22dd196
+      md5: 167efd1c2336be163249d7b3bbb54cbd
       size: 362604
     - path: src/validate.py
       hash: md5
@@ -131,7 +131,7 @@ stages:
     deps:
     - path: data/silver/silver_data.csv
       hash: md5
-      md5: 2fbd9ca4d1e467f0311d80d1a22dd196
+      md5: 167efd1c2336be163249d7b3bbb54cbd
       size: 362604
     - path: src/prepare_gold.py
       hash: md5
