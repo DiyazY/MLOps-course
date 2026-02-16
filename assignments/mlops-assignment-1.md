@@ -271,8 +271,6 @@ The boundary sits higher in the stack compared to hyperscalers. DigitalOcean pro
 
 ## 7) References
 
-[Note: Verify these links and add any additional sources you consulted]
-
 1. DigitalOcean. "Droplets Documentation." DigitalOcean Docs, 2026. https://docs.digitalocean.com/products/droplets/
 
 2. DigitalOcean. "Spaces Object Storage." DigitalOcean Docs, 2026. https://docs.digitalocean.com/products/spaces/
