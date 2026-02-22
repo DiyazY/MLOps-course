@@ -1,0 +1,42 @@
+data:
+  gold_v1: data/gold/gold_v1.csv    # Gold data from batch 3 (828 rows, up to May 2015)
+  gold_v2: data/gold/gold_v2.csv    # Gold data from batch 5 (1384 rows, full dataset)
+  test_raw: data/test/test_raw.csv  # Raw test.csv from Delhi Climate dataset
+  test_processed: data/test/test_processed.csv
+  # Reference to Assignment 3 data versions:
+  #   gold_v1 -> assignment_3 commit 49f6423 (max_batch=3)
+  #   gold_v2 -> assignment_3 commit 5205f97 (max_batch=5)
+
+model:
+  type: gradient_boosting
+  test_size: 0.2           # Temporal split: last 20% for validation
+  random_state: 42
+
+  # Gradient Boosting hyperparameters (initial)
+  n_estimators: 100
+  max_depth: 5
+  learning_rate: 0.1
+  min_samples_split: 5
+  min_samples_leaf: 2
+  subsample: 0.9
+
+tuning:
+  # Hyperparameter search space for GridSearchCV
+  n_estimators: [50, 100, 200]
+  max_depth: [3, 5, 7]
+  learning_rate: [0.05, 0.1, 0.2]
+  min_samples_split: [3, 5, 10]
+
+kpi:
+  primary: rmse              # Root Mean Squared Error
+  secondary:
+    - mae                    # Mean Absolute Error
+    - r2                     # R-squared (stability indicator)
+  thresholds:
+    rmse_acceptable: 3.0     # Acceptable RMSE in degrees Celsius
+    r2_minimum: 0.85         # Minimum R-squared for deployment
+    mae_acceptable: 2.0      # Acceptable MAE in degrees Celsius
+
+mlflow:
+  experiment_name: delhi-temperature-forecast
+  tracking_uri: mlruns
