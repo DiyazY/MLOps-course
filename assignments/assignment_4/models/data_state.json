@@ -1,0 +1,14 @@
+{
+  "gold_v1.csv": {
+    "path": "data/gold/gold_v1.csv",
+    "md5": "c2a62fe178c7578948b97dec7897732c",
+    "mtime": 1771793596.7475543,
+    "size": 182404
+  },
+  "gold_v2.csv": {
+    "path": "data/gold/gold_v2.csv",
+    "md5": "a3c4d6a97d02154db729ce1075371e08",
+    "mtime": 1771793596.8494291,
+    "size": 309151
+  }
+}
